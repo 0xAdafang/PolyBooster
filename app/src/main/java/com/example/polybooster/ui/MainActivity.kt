@@ -1,4 +1,4 @@
-package com.example.polybooster
+package com.example.polybooster.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -7,9 +7,8 @@ import com.example.polybooster.R
 import com.example.polybooster.data.database.AppDatabase
 import com.example.polybooster.data.model.Card
 import kotlinx.coroutines.*
-import com.example.polybooster.ui.CardAdapter
-
-
+import android.widget.Button
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +27,21 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        val boosterButton: Button = findViewById(R.id.boosterButton)
+        boosterButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, BoosterActivity::class.java))
+        }
+
+        val quizButton: Button = findViewById(R.id.quizButton)
+        quizButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, QuizActivity::class.java))
+        }
+
+        val statsButton: Button = findViewById(R.id.statsButton)
+        statsButton.setOnClickListener {
+            startActivity(Intent(this@MainActivity, StatsActivity::class.java))
+        }
+
         loadCards()
     }
 
@@ -44,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 Card(front = "Camisa", back = "Chemise", lang = "ES", portfolio = "vêtements")
             )
             db.cardDao().insertAll(baseCards)
-
 
             val updatedCards = db.cardDao().getAllCards()
 

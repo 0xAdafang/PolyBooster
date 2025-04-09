@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Couleurs principales du thème -->
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+
+    <!-- Couleurs personnalisées -->
+    <color name="background">#F2F2F7</color>
+    <color name="text_primary">#1C1C1E</color>
+    <color name="text_secondary">#6D6D72</color>
+    <color name="accent_red">#FF3B30</color>
+    <color name="accent_green">#34C759</color>
+    <color name="accent_yellow">#FFCC00</color>
+</resources>

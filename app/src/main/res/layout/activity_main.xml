@@ -10,8 +10,42 @@
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/boosterButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/boosterButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Voir Booster du Jour"
+        style="@style/RoundedButton"
+        app:layout_constraintBottom_toTopOf="@+id/quizButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/quizButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Lancer le Quiz"
+        style="@style/RoundedButton"
+        app:layout_constraintBottom_toTopOf="@+id/statsButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/statsButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Voir mes Stats"
+        style="@style/RoundedButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

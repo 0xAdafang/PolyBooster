@@ -36,3 +36,4 @@ class CardAdapter(private var cards: List<Card>) :
         notifyDataSetChanged()
     }
 }
+
