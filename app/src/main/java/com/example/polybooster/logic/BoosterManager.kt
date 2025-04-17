@@ -1,67 +1,62 @@
-package com.example.polybooster.logic
+// BoosterManager.kt
+package com.example.polybooster.booster   // ← assure‑toi que le chemin du fichier correspond
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.core.content.edit          // KTX
 import com.example.polybooster.data.database.AppDatabase
 import com.example.polybooster.data.model.Card
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
 
-class BoosterManager(private val context: Context, private val db: AppDatabase) {
+class BoosterManager(
+    context: Context,
+    private val database: AppDatabase     // renommage plus explicite
+) {
+    private val prefs = context.getSharedPreferences("BoosterPrefs", Context.MODE_PRIVATE)
+    private val cardDao = database.cardDao()   // ← règle le « unresolved reference »
 
     companion object {
-        private const val PREFS_NAME = "booster_prefs"
-        private const val KEY_NEXT_BOOSTER_TIME = "next_booster_time"
-        private const val KEY_STARS = "stars"
-        private const val BOOSTER_INTERVAL_MS = 12 * 60 * 60 * 1000L // 12h
-        private const val BOOSTER_SIZE = 5
+        private const val KEY_STAR_COUNT = "star_count"
+        private const val BOOSTER_COST = 10
     }
 
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
-    fun getRemainingTimeMillis(): Long {
-        val now = System.currentTimeMillis()
-        return (prefs.getLong(KEY_NEXT_BOOSTER_TIME, 0L) - now).coerceAtLeast(0)
-    }
-
-    fun canOpenBooster(): Boolean = getRemainingTimeMillis() == 0L || getStars() > 0
-
-    fun getStars(): Int = prefs.getInt(KEY_STARS, 0)
-
-    fun addStar() {
-        val current = getStars()
-        prefs.edit().putInt(KEY_STARS, current + 1).apply()
-    }
-
-    fun useStar(): Boolean {
-        val current = getStars()
-        return if (current > 0) {
-            prefs.edit().putInt(KEY_STARS, current - 1).apply()
-            true
-        } else false
-    }
-
-    suspend fun openBooster(useStar: Boolean = false): List<Card> = withContext(Dispatchers.IO) {
-        if (!canOpenBooster()) return@withContext emptyList()
-
-        if (getRemainingTimeMillis() > 0 && useStar) {
-            if (!useStar()) return@withContext emptyList()
-        } else {
-            val nextTime = System.currentTimeMillis() + BOOSTER_INTERVAL_MS
-            prefs.edit().putLong(KEY_NEXT_BOOSTER_TIME, nextTime).apply()
+    /** Initialise 20 étoiles au tout premier lancement. */
+    suspend fun initializeIfFirstLaunch() = withContext(Dispatchers.IO) {
+        if (!prefs.contains(KEY_STAR_COUNT)) {
+            prefs.edit { putInt(KEY_STAR_COUNT, 20) }
         }
-
-        val allCards = db.cardDao().getAllCards()
-        val selected = allCards.shuffled().take(BOOSTER_SIZE)
-
-        // Marquer les cartes tirées comme débloquées
-        selected.forEach {
-            val updated = it.copy(unlocked = true)
-            db.cardDao().insertCard(updated)
-        }
-
-        return@withContext selected
     }
+
+    suspend fun canOpenBooster(): Boolean = withContext(Dispatchers.IO) {
+        getStarCount() >= BOOSTER_COST
+    }
+
+    /** Tire 5 cartes au hasard parmi celles encore verrouillées et les déverrouille. */
+    suspend fun openBooster(): List<Card> = withContext(Dispatchers.IO) {
+        if (!canOpenBooster()) throw IllegalStateException("Not enough stars")
+
+        // dépense les 10 étoiles
+        prefs.edit { putInt(KEY_STAR_COUNT, getStarCount() - BOOSTER_COST) }
+
+        val cards = cardDao.getRandomLockedCards(5)
+        cards.forEach { cardDao.unlockCard(it.id) }
+        cards
+    }
+
+    /** Ajoute n étoiles (récompense de quizz, daily, etc.). */
+    fun addStar() = addStars(1)
+
+    private fun addStars(amount: Int) {
+        prefs.edit { putInt(KEY_STAR_COUNT, getStarCount() + amount) }
+    }
+    fun getStarCount(): Int = prefs.getInt(KEY_STAR_COUNT, 0)
+
+    suspend fun spendStar(): Boolean = withContext(Dispatchers.IO) {
+        val current = getStarCount()
+        if (current <= 0) return@withContext false
+        prefs.edit { putInt(KEY_STAR_COUNT, current - 10) }
+        true
+    }
+
+
 }

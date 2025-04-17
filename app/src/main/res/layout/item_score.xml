@@ -14,35 +14,27 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/cardFrText"
+            android:id="@+id/scoreText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FR : ..."
+            android:text="Score : 8/10"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/cardEnText"
+            android:id="@+id/langText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EN : ..."
-            android:textSize="16sp" />
+            android:text="Langue : EN"
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/cardEsText"
+            android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ES : ..."
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/cardPortfolio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Catégorie : ..."
+            android:text="Le : 2024-04-01 12:30"
             android:textSize="14sp"
             android:textColor="@color/text_secondary" />
 
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

@@ -1,76 +1,77 @@
+// BoosterActivity.kt
 package com.example.polybooster.ui
 
+import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.polybooster.R
+import com.example.polybooster.booster.BoosterManager
 import com.example.polybooster.data.database.AppDatabase
-import com.example.polybooster.logic.BoosterManager
-import kotlinx.coroutines.*
+import com.example.polybooster.databinding.ActivityBoosterBinding
+import kotlinx.coroutines.launch
 
 class BoosterActivity : AppCompatActivity() {
-
-    private lateinit var db: AppDatabase
+    private lateinit var binding: ActivityBoosterBinding
     private lateinit var boosterManager: BoosterManager
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: CardAdapter
-    private lateinit var openButton: Button
-    private lateinit var timerText: TextView
-    private lateinit var useStarButton: Button
-    private lateinit var starCountText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_booster)
+        binding = ActivityBoosterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        db = AppDatabase.getDatabase(this)
+        // 1.  Passe la DATABASE, pas le DAO
+        val db = AppDatabase.getDatabase(this)
         boosterManager = BoosterManager(this, db)
 
-        recyclerView = findViewById(R.id.boosterRecyclerView)
-        adapter = CardAdapter(listOf())
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-
-        openButton = findViewById(R.id.openBoosterButton)
-        timerText = findViewById(R.id.timerTextView)
-        useStarButton = findViewById(R.id.useStarButton)
-        starCountText = findViewById(R.id.starCountTextView)
-
-        updateUI()
-
-        openButton.setOnClickListener {
-            openBooster(false)
+        lifecycleScope.launch {
+            boosterManager.initializeIfFirstLaunch()
+            updateStars()
         }
 
-        useStarButton.setOnClickListener {
-            openBooster(true)
-        }
-    }
+        binding.buttonOpenBooster.setOnClickListener {
+            lifecycleScope.launch {
+                if (boosterManager.canOpenBooster()) {
+                    val cards = boosterManager.openBooster()
+                    updateStars()
 
-    private fun updateUI() {
-        val millis = boosterManager.getRemainingTimeMillis()
-        if (millis == 0L) {
-            timerText.text = "Booster disponible !"
-        } else {
-            val hours = (millis / (1000 * 60 * 60))
-            val minutes = (millis / (1000 * 60)) % 60
-            timerText.text = "Prochain booster dans ${hours}h ${minutes}min"
-        }
-
-        val stars = boosterManager.getStars()
-        starCountText.text = "Étoiles : $stars"
-    }
-
-    private fun openBooster(useStar: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val boosterCards = boosterManager.openBooster(useStar)
-            withContext(Dispatchers.Main) {
-                adapter.updateCards(boosterCards)
-                updateUI()
+                    // 2.  Signature correcte du dialog
+                    if (cards.isNotEmpty()) {
+                        BoosterRevealDialog(cards)
+                            .show(supportFragmentManager, "BoosterReveal")
+                    }
+                } else {
+                    Toast.makeText(
+                        this@BoosterActivity,
+                        "Pas assez d’étoiles (10 requises)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
+
+        binding.buttonSpendStar.setOnClickListener {
+            lifecycleScope.launch {
+                val success = boosterManager.spendStar()   // 3.  Méthode ré‑ajoutée
+                updateStars()
+                if (!success) {
+                    Toast.makeText(
+                        this@BoosterActivity,
+                        "Aucune étoile à dépenser",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+        binding.buttonBack.setOnClickListener { finish() }
+    }
+
+    private fun updateStars() {
+        val stars = boosterManager.getStarCount()
+        binding.starsLabel.text = "Étoiles : $stars"
+        binding.resultText.text =
+            if (stars >= 10) "Booster disponible !" else "Gagnez des étoiles dans les quiz."
     }
 }
+
+

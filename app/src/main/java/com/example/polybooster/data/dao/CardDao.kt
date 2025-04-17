@@ -1,25 +1,32 @@
 package com.example.polybooster.data.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.polybooster.data.model.Card
+
+
 
 @Dao
 interface CardDao {
-    @Query("SELECT * FROM Card")
-    fun getAllCards(): List<Card>
+
+    @Query("SELECT * FROM cards")
+    suspend fun getAllCards(): List<Card>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCard(card: Card)
+    suspend fun insertCard(card: Card)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(cards: List<Card>)
+    suspend fun insertAll(cards: List<Card>)
 
-    @Query("SELECT * FROM Card WHERE unlocked = 1 LIMIT 7")
-    fun getBoosterCards(): List<Card>
+    @Delete
+    suspend fun deleteCard(card: Card)
 
-    @Query("SELECT * FROM Card WHERE portfolio = :portfolioName")
-    fun getCardsByPortfolio(portfolioName: String): List<Card>
+    @Query("SELECT * FROM cards WHERE unlocked = 0 ORDER BY RANDOM() LIMIT :limit")
+    suspend fun getRandomLockedCards(limit: Int): List<Card>
 
-    @Query("SELECT * FROM Card WHERE unlocked = 1 AND lang = :language")
-    fun getUnlockedCardsByLanguage(language: String): List<Card>
+    @Query("UPDATE cards SET unlocked = 1 WHERE id = :cardId")
+    suspend fun unlockCard(cardId: Int)
 }

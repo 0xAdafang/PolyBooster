@@ -3,12 +3,13 @@ package com.example.polybooster.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "cards")
 data class Card(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val front: String,           // français
-    val back: String,            // traduction
-    val lang: String,            // "EN" ou "ES"
-    val portfolio: String,       // ex: "aliments", "vêtements"
-    val unlocked: Boolean = false
+    val fr: String,
+    val en: String,
+    val es: String,
+    val category: String,
+    val unlocked: Boolean = false,
+    val portfolio: String? = null
 )

@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.polybooster.R
 import com.example.polybooster.data.model.Card
 
+class CardAdapter(private var cards: List<Card>) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
-class CardAdapter(private var cards: List<Card>) :
-    RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
-
-    class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val frontText: TextView = itemView.findViewById(R.id.frontText)
-        val backText: TextView = itemView.findViewById(R.id.backText)
+    class CardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val frText: TextView = view.findViewById(R.id.cardFrText)
+        val enText: TextView = view.findViewById(R.id.cardEnText)
+        val esText: TextView = view.findViewById(R.id.cardEsText)
+        val portfolioText: TextView = view.findViewById(R.id.cardPortfolio)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -25,8 +25,10 @@ class CardAdapter(private var cards: List<Card>) :
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val card = cards[position]
-        holder.frontText.text = card.front
-        holder.backText.text = card.back
+        holder.frText.text = "FR : ${card.fr}"
+        holder.enText.text = "EN : ${card.en}"
+        holder.esText.text = "ES : ${card.es}"
+        holder.portfolioText.text = "Catégorie : ${card.portfolio}"
     }
 
     override fun getItemCount() = cards.size
@@ -36,4 +38,3 @@ class CardAdapter(private var cards: List<Card>) :
         notifyDataSetChanged()
     }
 }
-

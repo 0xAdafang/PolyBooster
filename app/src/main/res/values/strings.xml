@@ -1,3 +1,43 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <string name="app_name">PolyBooster</string>
+
+    <string name="quiz_restart">Rejouer le quiz</string>
+    <string name="quiz_home">Accueil</string>
+
+    <string name="lang_en">Anglais</string>
+    <string name="lang_es">Espagnol</string>
+    <string name="lang_mix">Aléatoire</string>
+    <string name="lang_selected">Langue sélectionnée : %1$s</string>
+
+    <string name="quiz_not_enough_cards">Pas assez de cartes débloquées pour le quiz.</string>
+    <string name="quiz_prompt">Traduis ce mot (%1$s → %2$s) : %3$s</string>
+    <string name="quiz_progress">Progression : %1$d/%2$d</string>
+    <string name="quiz_win">Bravo ! 10/10. ⭐️ obtenue !</string>
+    <string name="quiz_score">Score : %1$d / 10</string>
+
+    <string name="stat_title">Statistiques globales</string>
+    <string name="stat_total">Total parties : %1$d</string>
+    <string name="stat_average">Moyenne : %1$s / 10</string>
+    <string name="stat_best">Meilleur score : %1$s / 10</string>
+    <string name="stat_lang">Répartition :
+EN → %1$d, ES → %2$d, MIX → %3$d</string>
+
+    <string name="booster_star_count">Étoiles : %1$d</string>
+    <string name="booster_empty">Aucun booster disponible pour l instant.</string>
+    <string name="booster_success">Booster ouvert : %1$d cartes débloquées !</string>
+    <string name="booster_wait">Veuillez attendre encore %1$d minutes avant le prochain booster.</string>
+
+    <string-array name="quiz_languages">
+        <item>Anglais</item>
+        <item>Espagnol</item>
+        <item>Aléatoire</item>
+    </string-array>
+
+    <string name="label_star_spent">Étoile dépensée !</string>
+    <string name="label_star_error">Pas assez d’étoiles.</string>
+    <string name="label_etoiles">Étoiles : %1$d</string>
+    <string name="label_star_not_enough">Pas assez d étoiles pour ouvrir un booster.</string>
+
 </resources>
