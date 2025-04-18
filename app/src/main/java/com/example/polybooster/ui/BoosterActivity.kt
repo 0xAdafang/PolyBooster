@@ -19,7 +19,7 @@ class BoosterActivity : AppCompatActivity() {
         binding = ActivityBoosterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1.  Passe la DATABASE, pas le DAO
+
         val db = AppDatabase.getDatabase(this)
         boosterManager = BoosterManager(this, db)
 
@@ -34,7 +34,7 @@ class BoosterActivity : AppCompatActivity() {
                     val cards = boosterManager.openBooster()
                     updateStars()
 
-                    // 2.  Signature correcte du dialog
+
                     if (cards.isNotEmpty()) {
                         BoosterRevealDialog(cards)
                             .show(supportFragmentManager, "BoosterReveal")
@@ -51,7 +51,7 @@ class BoosterActivity : AppCompatActivity() {
 
         binding.buttonSpendStar.setOnClickListener {
             lifecycleScope.launch {
-                val success = boosterManager.spendStar()   // 3.  Méthode ré‑ajoutée
+                val success = boosterManager.spendStar()
                 updateStars()
                 if (!success) {
                     Toast.makeText(

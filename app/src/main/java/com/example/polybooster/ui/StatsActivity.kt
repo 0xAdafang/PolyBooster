@@ -1,14 +1,16 @@
 package com.example.polybooster.ui
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.polybooster.R
+import com.example.polybooster.booster.BoosterManager
 import com.example.polybooster.data.database.AppDatabase
 import com.example.polybooster.data.model.QuizScore
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,76 +19,111 @@ import java.util.*
 
 class StatsActivity : AppCompatActivity() {
 
+    // BDD / manager
     private lateinit var db: AppDatabase
+    private lateinit var boosterManager: BoosterManager
+
+    // UI
+    private lateinit var unlockedText: TextView
+    private lateinit var totalText   : TextView
+    private lateinit var starText    : TextView
+    private lateinit var globalStats : TextView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ScoreAdapter
-    private lateinit var globalStats: TextView
+    private lateinit var adapter     : ScoreAdapter
+    private lateinit var backButton  : Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
-        db = AppDatabase.getDatabase(this)
+        // Bouton retour
+        backButton = findViewById(R.id.buttonBack)
+        backButton.setOnClickListener { finish() }
+
+        // BDD & manager
+        db             = AppDatabase.getDatabase(this)
+        boosterManager = BoosterManager(this, db)
+
+        // findViewById
+        unlockedText = findViewById(R.id.unlockedTextView)
+        totalText    = findViewById(R.id.totalTextView)
+        starText     = findViewById(R.id.starTextView)
+        globalStats  = findViewById(R.id.globalStats)
         recyclerView = findViewById(R.id.statsRecyclerView)
-        globalStats = findViewById(R.id.globalStats)
+
+        // RecyclerView
         adapter = ScoreAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter       = adapter
 
-        loadScores()
+        loadStats()
     }
 
-    private fun loadScores() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val scores = db.quizScoreDao().getAllScores()
-            val moyenne = scores.map { it.score }.average().takeIf { it.isFinite() }?.let { "%.2f".format(it) } ?: "-"
-            val max = scores.maxByOrNull { it.score }?.score?.toString() ?: "-"
-            val count = scores.size
-            val langMap = scores.groupingBy { it.lang }.eachCount()
-            val en = langMap["EN"] ?: 0
-            val es = langMap["ES"] ?: 0
-            val mix = langMap["MIX"] ?: 0
+    /** Charge les cartes, étoiles et scores */
+    private fun loadStats() = lifecycleScope.launch(Dispatchers.IO) {
 
-            val text = listOf(
-                getString(R.string.stat_total, count),
-                getString(R.string.stat_average, moyenne),
-                getString(R.string.stat_best, max),
-                getString(R.string.stat_lang, en, es, mix)
-            ).joinToString("\n")
+        /* ---- Cartes & étoiles ---- */
+        val cards          = db.cardDao().getAllCards()
+        val unlockedCount  = cards.count { it.unlocked }
+        val totalCount     = cards.size
+        val starsAvailable = boosterManager.getStarCount()
 
-            withContext(Dispatchers.Main) {
-                globalStats.text = text
-                adapter.updateScores(scores)
-            }
+        /* ---- Scores ---- */
+        val scores   = db.quizScoreDao().getAllScores()
+        val average  = scores.map { it.score }.average()
+        val best     = scores.maxByOrNull { it.score }?.score ?: "-"
+        val count    = scores.size
+        val langMap  = scores.groupingBy { it.lang }.eachCount()
+
+        withContext(Dispatchers.Main) {
+            // compteurs cartes / étoiles
+            unlockedText.text = getString(R.string.unlocked_cards, unlockedCount)
+            totalText.text    = getString(R.string.total_cards,    totalCount)
+            starText.text     = getString(R.string.available_stars, starsAvailable)
+
+            // bloc stats globales
+            globalStats.text = getString(
+                R.string.stat_block,
+                count,
+                if (average.isFinite()) "%.2f".format(average) else "-",
+                best,
+                langMap["EN"] ?: 0,
+                langMap["ES"] ?: 0,
+                langMap["MIX"] ?: 0
+            )
+
+            adapter.updateScores(scores)
         }
     }
 
-    class ScoreAdapter(private var scores: List<QuizScore>) : RecyclerView.Adapter<ScoreViewHolder>() {
+    /* ------------------ Adapter ------------------ */
+    class ScoreAdapter(private var scores: List<QuizScore>)
+        : RecyclerView.Adapter<ScoreViewHolder>() {
 
-        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ScoreViewHolder {
-            val view = android.view.LayoutInflater.from(parent.context).inflate(R.layout.item_score, parent, false)
-            return ScoreViewHolder(view)
-        }
+        override fun onCreateViewHolder(p: android.view.ViewGroup, v: Int) =
+            ScoreViewHolder(android.view.LayoutInflater.from(p.context)
+                .inflate(R.layout.item_score, p, false))
 
-        override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
-            val score = scores[position]
-            holder.scoreText.text = "Score : ${score.score}/10"
-            holder.langText.text = "Langue : ${score.lang}"
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-            holder.dateText.text = "Le : ${sdf.format(Date(score.timestamp))}"
+        override fun onBindViewHolder(h: ScoreViewHolder, pos: Int) {
+            val s = scores[pos]
+            h.scoreText.text = "Score : ${s.score}/10"
+            h.langText.text  = "Langue : ${s.lang}"
+            h.dateText.text  = "Le : ${
+                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                    .format(Date(s.timestamp))
+            }"
         }
 
         override fun getItemCount() = scores.size
-
         fun updateScores(newScores: List<QuizScore>) {
-            scores = newScores
-            notifyDataSetChanged()
+            scores = newScores; notifyDataSetChanged()
         }
     }
 
-    class ScoreViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
-        val scoreText: android.widget.TextView = view.findViewById(R.id.scoreText)
-        val langText: android.widget.TextView = view.findViewById(R.id.langText)
-        val dateText: android.widget.TextView = view.findViewById(R.id.dateText)
+    class ScoreViewHolder(v: android.view.View) : RecyclerView.ViewHolder(v) {
+        val scoreText: TextView = v.findViewById(R.id.scoreText)
+        val langText : TextView = v.findViewById(R.id.langText)
+        val dateText : TextView = v.findViewById(R.id.dateText)
     }
 }

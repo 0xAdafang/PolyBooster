@@ -14,8 +14,10 @@
     <string name="quiz_not_enough_cards">Pas assez de cartes débloquées pour le quiz.</string>
     <string name="quiz_prompt">Traduis ce mot (%1$s → %2$s) : %3$s</string>
     <string name="quiz_progress">Progression : %1$d/%2$d</string>
-    <string name="quiz_win">Bravo ! 10/10. ⭐️ obtenue !</string>
-    <string name="quiz_score">Score : %1$d / 10</string>
+    <string name="quiz_win">Bravo ! ⭐️ obtenue !</string>
+    <string name="quiz_score">Ton score : %1$d/10</string>
+    <string name="quiz_score_star">Bravo ! %1$d/10 – +1 étoile !</string>
+
 
     <string name="stat_title">Statistiques globales</string>
     <string name="stat_total">Total parties : %1$d</string>
@@ -39,5 +41,23 @@ EN → %1$d, ES → %2$d, MIX → %3$d</string>
     <string name="label_star_error">Pas assez d’étoiles.</string>
     <string name="label_etoiles">Étoiles : %1$d</string>
     <string name="label_star_not_enough">Pas assez d étoiles pour ouvrir un booster.</string>
+    <string name="ouvrir_un_booster">Ouvrir un Booster</string>
+
+    <string name="back">Retour</string>
+
+    <string name="unlocked_cards">Cartes débloquées : %1$d</string>
+    <string name="total_cards">Cartes totales : %1$d</string>
+    <string name="available_stars">Étoiles disponibles : %1$d</string>
+
+    <string name="quiz_quit">Quitter</string>
+
+    <string name="stat_block">
+    Total parties : %1$d\n
+    Moyenne : %2$s / 10\n
+    Meilleur score : %3$s / 10\n
+    Répartition : EN → %4$d, ES → %5$d, MIX → %6$d</string>
+
+    <string name="menu_collection">Collection</string>
+
 
 </resources>

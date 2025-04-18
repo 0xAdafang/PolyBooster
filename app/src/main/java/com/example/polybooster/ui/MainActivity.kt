@@ -37,13 +37,15 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.statsButton).setOnClickListener {
             startActivity(Intent(this, StatsActivity::class.java))
         }
+        findViewById<Button>(R.id.collectionButton).setOnClickListener {
+            startActivity(Intent(this, CollectionActivity::class.java))
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             val count = db.cardDao().getAllCards().size
             if (count == 0) {
                 seedExtendedCards()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "10 cartes offertes !", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -113,4 +115,5 @@ class MainActivity : AppCompatActivity() {
         )
         db.cardDao().insertAll(cards)
     }
+
 }

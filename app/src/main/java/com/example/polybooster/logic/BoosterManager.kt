@@ -1,5 +1,5 @@
 // BoosterManager.kt
-package com.example.polybooster.booster   // ← assure‑toi que le chemin du fichier correspond
+package com.example.polybooster.booster
 
 import android.content.Context
 import androidx.core.content.edit          // KTX
@@ -10,10 +10,10 @@ import kotlinx.coroutines.withContext
 
 class BoosterManager(
     context: Context,
-    private val database: AppDatabase     // renommage plus explicite
+    private val database: AppDatabase
 ) {
     private val prefs = context.getSharedPreferences("BoosterPrefs", Context.MODE_PRIVATE)
-    private val cardDao = database.cardDao()   // ← règle le « unresolved reference »
+    private val cardDao = database.cardDao()
 
     companion object {
         private const val KEY_STAR_COUNT = "star_count"

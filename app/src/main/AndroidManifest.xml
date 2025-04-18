@@ -17,6 +17,9 @@
         <activity android:name=".ui.QuizActivity" />
         <activity android:name=".ui.BoosterActivity" />
         <activity
+            android:name=".ui.CollectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>

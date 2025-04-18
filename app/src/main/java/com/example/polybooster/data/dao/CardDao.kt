@@ -29,4 +29,11 @@ interface CardDao {
 
     @Query("UPDATE cards SET unlocked = 1 WHERE id = :cardId")
     suspend fun unlockCard(cardId: Int)
+
+    @Query("""
+    SELECT * FROM cards
+    WHERE category = :category
+    ORDER BY fr
+""")
+    suspend fun getCardsByCategory(category: String): List<Card>
 }

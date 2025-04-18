@@ -48,7 +48,10 @@ class QuizManager(private val db: AppDatabase, private val boosterManager: Boost
             userAnswers[q.id]?.trim()
                 ?.equals(q.correctAnswer.trim(), ignoreCase = true) == true
         }
-        if (correct == 10) boosterManager.addStar()
+
+
+        if (correct >= 7) boosterManager.addStar()
+
         return correct
     }
 }

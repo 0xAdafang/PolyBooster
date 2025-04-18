@@ -18,7 +18,7 @@
         android:id="@+id/boosterButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Voir Booster du Jour"
+        android:text="@string/ouvrir_un_booster"
         style="@style/RoundedButton"
         app:layout_constraintBottom_toTopOf="@+id/quizButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +46,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"/>
+    <Button
+        android:id="@+id/collectionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Collection"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

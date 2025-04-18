@@ -15,6 +15,13 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/totalTextView"
