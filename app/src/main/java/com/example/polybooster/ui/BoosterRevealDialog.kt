@@ -65,7 +65,7 @@ class BoosterRevealDialog(
 
     private fun updateView() {
         val card = cards[currentIndex]
-        cardTitle.text = "Catégorie : ${card.portfolio}"
+        cardTitle.text = "Catégorie : ${card.category}"
         fr.text = "FR : ${card.fr}"
         en.text = "EN : ${card.en}"
         es.text = "ES : ${card.es}"

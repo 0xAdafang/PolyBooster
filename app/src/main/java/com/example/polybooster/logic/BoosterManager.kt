@@ -17,7 +17,7 @@ class BoosterManager(
 
     companion object {
         private const val KEY_STAR_COUNT = "star_count"
-        private const val BOOSTER_COST = 10
+        private const val BOOSTER_COST = 1
     }
 
     /** Initialise 20 étoiles au tout premier lancement. */
