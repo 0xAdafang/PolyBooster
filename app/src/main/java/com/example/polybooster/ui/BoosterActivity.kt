@@ -42,26 +42,13 @@ class BoosterActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@BoosterActivity,
-                        "Pas assez d’étoiles (10 requises)",
+                        "Pas assez d’étoiles (5 requises)",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
         }
 
-        binding.buttonSpendStar.setOnClickListener {
-            lifecycleScope.launch {
-                val success = boosterManager.spendStar()
-                updateStars()
-                if (!success) {
-                    Toast.makeText(
-                        this@BoosterActivity,
-                        "Aucune étoile à dépenser",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
 
         binding.buttonBack.setOnClickListener { finish() }
     }
@@ -70,7 +57,7 @@ class BoosterActivity : AppCompatActivity() {
         val stars = boosterManager.getStarCount()
         binding.starsLabel.text = "Étoiles : $stars"
         binding.resultText.text =
-            if (stars >= 10) "Booster disponible !" else "Gagnez des étoiles dans les quiz."
+            if (stars >= 5) "Booster disponible !" else "Gagnez des étoiles dans les quiz."
     }
 }
 

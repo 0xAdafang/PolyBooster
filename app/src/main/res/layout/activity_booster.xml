@@ -33,17 +33,14 @@
         android:padding="16dp"
         android:backgroundTint="@color/purple_500"
         android:textColor="@android:color/white" />
-
-    <Button
-        android:id="@+id/buttonSpendStar"
+    <TextView
+        android:id="@+id/boosterCostText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dépenser une étoile"
-        android:textAllCaps="false"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white" />
+        android:text="Un booster coûte 5 étoiles."
+        android:textSize="14sp"
+        android:layout_marginTop="8dp" />
+
 
     <Button
         android:id="@+id/buttonBack"
