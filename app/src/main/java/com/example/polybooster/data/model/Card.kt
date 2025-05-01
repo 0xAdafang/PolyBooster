@@ -11,5 +11,6 @@ data class Card(
     val es: String,
     val category: String,
     val unlocked: Boolean = false,
-    val portfolio: String? = null
+    val portfolio: String? = null,
+    val iconName: String? = null
 )

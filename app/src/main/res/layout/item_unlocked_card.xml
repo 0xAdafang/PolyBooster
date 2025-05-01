@@ -1,38 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="@android:color/white">
+    android:layout_margin="12dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="6dp"
+    card_view:cardBackgroundColor="#FFFFFF"
+    android:backgroundTint="#FAFAFA">
 
-    <TextView
-        android:id="@+id/cardTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Catégorie"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
 
-    <TextView
-        android:id="@+id/cardFr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FR"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        <!-- Titre de la carte (Catégorie) -->
+        <TextView
+            android:id="@+id/cardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Catégorie"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#7A5CF5"
+            android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:id="@+id/cardEn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EN" />
+        <!-- Français -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
 
-    <TextView
-        android:id="@+id/cardEs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ES" />
-</LinearLayout>
+            <ImageView
+                android:id="@+id/iconFr"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_flag_fr"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/cardFr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FR"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Séparateur -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:background="#E0E0E0"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Anglais -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:id="@+id/iconEn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_flag_uk"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/cardEn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EN"
+                android:textSize="18sp"
+                android:textColor="#555555" />
+        </LinearLayout>
+
+        <!-- Espagnol -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iconEs"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_flag_es"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/cardEs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ES"
+                android:textSize="18sp"
+                android:textColor="#555555" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

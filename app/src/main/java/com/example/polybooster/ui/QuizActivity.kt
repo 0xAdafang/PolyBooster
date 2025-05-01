@@ -1,6 +1,7 @@
 package com.example.polybooster.ui
 
-import android.content.Intent
+import android.media.MediaPlayer
+import android.media.AudioManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -15,6 +16,9 @@ import com.example.polybooster.logic.QuizManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.speech.tts.TextToSpeech
+import java.util.Locale
+
 
 class QuizActivity : AppCompatActivity() {
 
@@ -31,8 +35,11 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var selectedLangLabel: TextView
     private lateinit var progressText: TextView
     private lateinit var restartButton: Button
-    private lateinit var homeButton   : Button
-    private lateinit var quitButton: Button
+    private lateinit var questionIcon: ImageView
+    private lateinit var textToSpeech: TextToSpeech
+
+
+
 
     // État du quiz
     private var questions    = listOf<QuizManager.QuizQuestion>()
@@ -43,11 +50,29 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
+
+
+        // Configuration du volume recommandé (75%)
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        val recommendedVolume = (maxVolume * 0.75).toInt()
+
+        // Appliquer seulement si volume actuel est trop bas
+        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        if (currentVolume < recommendedVolume) {
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, recommendedVolume, 0)
+        }
+
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.topAppBarQuiz)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Accueil"
 
-        quitButton = findViewById(R.id.quitButton)
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
-        quitButton.setOnClickListener { finish() }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         db             = AppDatabase.getDatabase(this)
         boosterManager = BoosterManager(this, db)
@@ -62,49 +87,74 @@ class QuizActivity : AppCompatActivity() {
         selectedLangLabel  = findViewById(R.id.selectedLangLabel)
         progressText       = findViewById(R.id.progressText)
         restartButton      = findViewById(R.id.restartButton)
-        homeButton         = findViewById(R.id.homeButton)
+        questionIcon = findViewById(R.id.questionIcon)
+
+
 
         // spinner langues
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.quiz_languages,
-            android.R.layout.simple_spinner_item
-        ).also { ad ->
-            ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            langSelector.adapter = ad
-        }
+        // Spinner langues avec icônes
+        val languages = listOf(
+            SpinnerLanguageItem("EN", R.drawable.ic_flag_uk),
+            SpinnerLanguageItem("ES", R.drawable.ic_flag_es),
+            SpinnerLanguageItem("MIX", R.drawable.languages)
+        )
+
+        val languageAdapter = LanguageAdapter(this, languages)
+        langSelector.adapter = languageAdapter
 
         langSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
-                selectedLang = when (pos) { 0 -> "EN"; 1 -> "ES"; else -> null }
-                val langName = when (selectedLang) {
-                    "EN" -> getString(R.string.lang_en)
-                    "ES" -> getString(R.string.lang_es)
-                    else -> getString(R.string.lang_mix)
-                }
-                selectedLangLabel.text = getString(R.string.lang_selected, langName)
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selected = languages[position]
+                selectedLang = if (selected.name == "MIX") null else selected.name
+                selectedLangLabel.text = "Langue sélectionnée : ${selected.name}"
+
+                // Animation douce
+                val fadeIn = AnimationUtils.loadAnimation(this@QuizActivity, android.R.anim.fade_in)
+                selectedLangLabel.startAnimation(fadeIn)
+
                 loadQuiz()
             }
-            override fun onNothingSelected(p: AdapterView<*>) {}
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        textToSpeech = TextToSpeech(this) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.language = Locale.FRANCE // ou Locale.FRANCE selon le besoin
+            }
         }
 
         nextButton.setOnClickListener {
             val q = questions[currentIndex]
-            userAnswers[q.id] = answerInput.text.toString()
-            currentIndex++
-            if (currentIndex < questions.size) showQuestion(true) else showResult()
+            val userAnswer = answerInput.text.toString().trim()
+            userAnswers[q.id] = userAnswer
+
+            // Vérifie si la réponse est correcte
+            val isCorrect = quizManager.checkAnswer(q, userAnswer)
+
+            // Choisit le son à jouer
+            val sound = if (isCorrect) R.raw.correct_sound else R.raw.wrong_sound
+
+            // Joue le son PUIS montre la question suivante
+            val player = MediaPlayer.create(this, sound)
+            player.setOnCompletionListener {
+                player.release()
+                currentIndex++
+                if (currentIndex < questions.size) {
+                    showQuestion(true)
+                } else {
+                    showResult()
+                }
+            }
+            player.start()
         }
+
+
 
         restartButton.setOnClickListener {
             restartButton.visibility = View.GONE
-            homeButton.visibility    = View.GONE
             resultText.text = ""
             loadQuiz()
-        }
-
-        homeButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
         }
     }
 
@@ -123,23 +173,48 @@ class QuizActivity : AppCompatActivity() {
             userAnswers.clear()
             showQuestion(false)
             nextButton.isEnabled = true
+            nextButton.visibility = View.VISIBLE
         }
     }
 
     private fun showQuestion(withAnim: Boolean) {
         val q = questions[currentIndex]
-        questionText.text = getString(
-            R.string.quiz_prompt, q.promptLang, q.answerLang, q.promptText
-        )
+
+        // Conversion des codes de langue (EN, ES) en noms complets
+        val langFull = when (q.answerLang) {
+            "EN" -> "Anglais"
+            "ES" -> "Espagnol"
+            else -> q.answerLang
+        }
+
+        // Affichage de la question
+        questionText.text = getString(R.string.quiz_prompt, q.promptText, langFull)
         progressText.text = getString(R.string.quiz_progress, currentIndex + 1, questions.size)
         answerInput.setText("")
         answerInput.requestFocus()
+        textToSpeech.speak(q.promptText, TextToSpeech.QUEUE_FLUSH, null, null)
 
+        // 🔹 Charger l'icône de la question (par nom depuis drawable)
+        val resId = resources.getIdentifier(q.iconName, "drawable", packageName)
+        if (resId != 0) {
+            questionIcon.setImageResource(resId)
+        } else {
+            questionIcon.setImageResource(R.drawable.ic_launcher_background) // fallback
+        }
+
+        // 🔹 Animation d’apparition
         if (withAnim) {
-            val anim = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
-            listOf(questionText, answerInput, progressText).forEach { it.startAnimation(anim) }
+            val fadeZoom = AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply {
+                duration = 400
+            }
+            listOf(questionIcon, questionText, answerInput, progressText).forEach {
+                it.startAnimation(fadeZoom)
+            }
         }
     }
+
+
+
 
     private fun showResult() {
         val score = quizManager.evaluateQuiz(userAnswers, questions)
@@ -148,7 +223,14 @@ class QuizActivity : AppCompatActivity() {
         else
             getString(R.string.quiz_score, score)
 
-
+        // ⭐ Son de joie si une étoile est gagnée
+        if (score >= 7) {
+            val mediaPlayer = MediaPlayer.create(this, R.raw.star_won)
+            mediaPlayer?.apply {
+                setOnCompletionListener { release() }
+                start()
+            }
+        }
 
         resultText.startAnimation(
             AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
@@ -158,7 +240,6 @@ class QuizActivity : AppCompatActivity() {
         nextButton.visibility = View.GONE
         nextButton.isEnabled  = false
         restartButton.visibility = View.VISIBLE
-        homeButton.visibility    = View.VISIBLE
 
         lifecycleScope.launch(Dispatchers.IO) {
             db.quizScoreDao().insert(
@@ -171,4 +252,13 @@ class QuizActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: android.view.MenuItem) =
         if (item.itemId == android.R.id.home) { finish(); true }
         else super.onOptionsItemSelected(item)
+
+    override fun onDestroy() {
+        if (::textToSpeech.isInitialized) {
+            textToSpeech.stop()
+            textToSpeech.shutdown()
+        }
+        super.onDestroy()
+    }
+
 }

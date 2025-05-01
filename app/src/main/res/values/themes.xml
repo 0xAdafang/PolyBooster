@@ -7,9 +7,53 @@
     <style name="Theme.PolyBooster" parent="Base.Theme.PolyBooster" />
 
     <!-- Rounded Button style -->
-    <style name="RoundedButton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">24dp</item>
-        <item name="android:backgroundTint">@color/purple_500</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="RoundedButton">
+        <item name="android:backgroundTint">#7A5CF5</item> <!-- violet/bleu moderne -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="RoundedButtonTop">
+        <item name="android:backgroundTint">#A085E4</item> <!-- violet plus doux -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textAllCaps">true</item> <!-- pour le bouton "Collection" -->
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="RoundedButtonSecondary">
+        <item name="android:backgroundTint">#3C3C55</item> <!-- Gris foncé, comme dans ton app -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Texte blanc -->
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textAllCaps">false</item> <!-- Texte normal, pas en majuscule -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:background">@drawable/bg_secondary_button</item> <!-- pour arrondi -->
+    </style>
+
+    <style name="StatTableHeader">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="StatTableValue">
+        <item name="android:textColor">#333333</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+
+
 </resources>

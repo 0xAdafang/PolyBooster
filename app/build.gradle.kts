@@ -53,7 +53,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
+    implementation("nl.dionsegijn:konfetti-xml:2.0.2")
+    implementation("nl.dionsegijn:konfetti-core:2.0.2")
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")

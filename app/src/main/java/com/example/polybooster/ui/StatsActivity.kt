@@ -1,7 +1,7 @@
 package com.example.polybooster.ui
 
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -19,111 +19,149 @@ import java.util.*
 
 class StatsActivity : AppCompatActivity() {
 
-    // BDD / manager
     private lateinit var db: AppDatabase
     private lateinit var boosterManager: BoosterManager
 
-    // UI
     private lateinit var unlockedText: TextView
-    private lateinit var totalText   : TextView
-    private lateinit var starText    : TextView
-    private lateinit var globalStats : TextView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter     : ScoreAdapter
-    private lateinit var backButton  : Button
+    private lateinit var totalText: TextView
+    private lateinit var starText: TextView
+    private lateinit var statParties: TextView
+    private lateinit var statMoyenne: TextView
+    private lateinit var statBest: TextView
 
+    private lateinit var langEnBar: ProgressBar
+    private lateinit var langEsBar: ProgressBar
+    private lateinit var langMixBar: ProgressBar
+    private lateinit var langEnCount: TextView
+    private lateinit var langEsCount: TextView
+    private lateinit var langMixCount: TextView
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ScoreAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
-        // Bouton retour
-        backButton = findViewById(R.id.buttonBack)
-        backButton.setOnClickListener { finish() }
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.topAppBarStats)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
 
-        // BDD & manager
-        db             = AppDatabase.getDatabase(this)
+        db = AppDatabase.getDatabase(this)
         boosterManager = BoosterManager(this, db)
 
-        // findViewById
+        // Texte des cartes
         unlockedText = findViewById(R.id.unlockedTextView)
-        totalText    = findViewById(R.id.totalTextView)
-        starText     = findViewById(R.id.starTextView)
-        globalStats  = findViewById(R.id.globalStats)
-        recyclerView = findViewById(R.id.statsRecyclerView)
+        totalText = findViewById(R.id.totalTextView)
+        starText = findViewById(R.id.starTextView)
+        statParties = findViewById(R.id.statParties)
+        statMoyenne = findViewById(R.id.statMoyenne)
+        statBest = findViewById(R.id.statBest)
+
+        // Langues
+        langEnBar = findViewById(R.id.langEnBar)
+        langEsBar = findViewById(R.id.langEsBar)
+        langMixBar = findViewById(R.id.langMixBar)
+        langEnCount = findViewById(R.id.langEnCount)
+        langEsCount = findViewById(R.id.langEsCount)
+        langMixCount = findViewById(R.id.langMixCount)
 
         // RecyclerView
+        recyclerView = findViewById(R.id.statsRecyclerView)
         adapter = ScoreAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter       = adapter
+        recyclerView.adapter = adapter
 
         loadStats()
     }
 
-    /** Charge les cartes, étoiles et scores */
     private fun loadStats() = lifecycleScope.launch(Dispatchers.IO) {
-
-        /* ---- Cartes & étoiles ---- */
-        val cards          = db.cardDao().getAllCards()
-        val unlockedCount  = cards.count { it.unlocked }
-        val totalCount     = cards.size
+        val cards = db.cardDao().getAllCards()
+        val unlockedCount = cards.count { it.unlocked }
+        val totalCount = cards.size
         val starsAvailable = boosterManager.getStarCount()
 
-        /* ---- Scores ---- */
-        val scores   = db.quizScoreDao().getAllScores()
-        val average  = scores.map { it.score }.average()
-        val best     = scores.maxByOrNull { it.score }?.score ?: "-"
-        val count    = scores.size
-        val langMap  = scores.groupingBy { it.lang }.eachCount()
+        val scores = db.quizScoreDao().getAllScores()
+        val average = scores.map { it.score }.average()
+        val best = scores.maxByOrNull { it.score }?.score ?: "-"
+        val count = scores.size
+        val langMap = scores.groupingBy { it.lang.uppercase() }.eachCount()
+
+        val en = langMap["EN"] ?: 0
+        val es = langMap["ES"] ?: 0
+        val mix = langMap["MIX"] ?: 0
+        val max = maxOf(en, es, mix, 1)
 
         withContext(Dispatchers.Main) {
-            // compteurs cartes / étoiles
+            // Carte infos
             unlockedText.text = getString(R.string.unlocked_cards, unlockedCount)
-            totalText.text    = getString(R.string.total_cards,    totalCount)
-            starText.text     = getString(R.string.available_stars, starsAvailable)
+            totalText.text = getString(R.string.total_cards, totalCount)
+            starText.text = getString(R.string.available_stars, starsAvailable)
 
-            // bloc stats globales
-            globalStats.text = getString(
-                R.string.stat_block,
-                count,
-                if (average.isFinite()) "%.2f".format(average) else "-",
-                best,
-                langMap["EN"] ?: 0,
-                langMap["ES"] ?: 0,
-                langMap["MIX"] ?: 0
-            )
+            // Carte résumé
+            statParties.text = "$count"
+            statMoyenne.text = if (average.isFinite()) "%.1f".format(average) else "-"
+            statBest.text = "$best/10"
 
+            // Carte langues
+            langEnBar.progress = en * 100 / max
+            langEsBar.progress = es * 100 / max
+            langMixBar.progress = mix * 100 / max
+
+            langEnCount.text = en.toString()
+            langEsCount.text = es.toString()
+            langMixCount.text = mix.toString()
+
+            // Adapter
             adapter.updateScores(scores)
         }
     }
 
-    /* ------------------ Adapter ------------------ */
-    class ScoreAdapter(private var scores: List<QuizScore>)
-        : RecyclerView.Adapter<ScoreViewHolder>() {
+    class ScoreAdapter(private var scores: List<QuizScore>) : RecyclerView.Adapter<ScoreViewHolder>() {
+        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ScoreViewHolder {
+            val view = android.view.LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_score, parent, false)
+            return ScoreViewHolder(view)
+        }
 
-        override fun onCreateViewHolder(p: android.view.ViewGroup, v: Int) =
-            ScoreViewHolder(android.view.LayoutInflater.from(p.context)
-                .inflate(R.layout.item_score, p, false))
+        override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
+            val s = scores[position]
+            holder.scoreText.text = "Score : ${s.score}/10"
+            holder.langText.text = "Langue : ${s.lang}"
+            holder.dateText.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(s.timestamp))
 
-        override fun onBindViewHolder(h: ScoreViewHolder, pos: Int) {
-            val s = scores[pos]
-            h.scoreText.text = "Score : ${s.score}/10"
-            h.langText.text  = "Langue : ${s.lang}"
-            h.dateText.text  = "Le : ${
-                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                    .format(Date(s.timestamp))
-            }"
+            holder.langIcon.setImageResource(
+                when (s.lang.uppercase()) {
+                    "FR" -> R.drawable.ic_flag_fr
+                    "EN" -> R.drawable.ic_flag_uk
+                    "ES" -> R.drawable.ic_flag_es
+                    else -> R.drawable.languages
+                }
+            )
+
+            val cardView = holder.itemView as androidx.cardview.widget.CardView
+            cardView.setCardBackgroundColor(
+                when {
+                    s.score >= 9 -> androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.goodResult)
+                    s.score >= 7 -> androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.averageResult)
+                    else -> androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.badResult)
+                }
+            )
         }
 
         override fun getItemCount() = scores.size
+
         fun updateScores(newScores: List<QuizScore>) {
-            scores = newScores; notifyDataSetChanged()
+            scores = newScores
+            notifyDataSetChanged()
         }
     }
 
-    class ScoreViewHolder(v: android.view.View) : RecyclerView.ViewHolder(v) {
-        val scoreText: TextView = v.findViewById(R.id.scoreText)
-        val langText : TextView = v.findViewById(R.id.langText)
-        val dateText : TextView = v.findViewById(R.id.dateText)
+    class ScoreViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
+        val scoreText: TextView = view.findViewById(R.id.scoreText)
+        val langText: TextView = view.findViewById(R.id.langText)
+        val dateText: TextView = view.findViewById(R.id.dateText)
+        val langIcon: android.widget.ImageView = view.findViewById(R.id.langIcon)
     }
 }

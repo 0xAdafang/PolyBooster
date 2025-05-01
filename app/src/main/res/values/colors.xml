@@ -6,4 +6,19 @@
     <color name="text_secondary">#757575</color>
     <color name="primary">#6200EE</color>
     <color name="purple_100">#E1BEE7</color>
+    <color name="gris_fonce">#3C3C55</color>
+    <color name="violet_flashy">#A726C1</color>  <!-- ton violet vif -->
+    <color name="blue_flashy">#2B6AFF</color>    <!-- ton bleu électrique flashy -->
+    <color name="primaryDark">#222222</color>
+    <color name="secondaryText">#666666</color>
+    <color name="goodResult">#81D4FA</color>    <!-- Bleu clair doux -->
+    <color name="averageResult">#FFF59D</color> <!-- Jaune lumière pastel -->
+    <color name="badResult">#FFE0B2</color>     <!-- Rouge rosé léger -->
+    <color name="backgroundLight">#E0F2F1</color>
+    <color name="backgroundSoftGrey">#F0F2F5</color>
+    <color name="backgroundBooster">#EF9A9A</color>
+    <color name="grey_chic_background">#F3F4F6</color>
+    <color name="orange_chic">#F4A261</color>
+
+
 </resources>

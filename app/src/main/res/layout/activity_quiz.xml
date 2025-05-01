@@ -4,108 +4,139 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:padding="16dp"
+    android:background="@color/averageResult">
 
-    <Spinner
-        android:id="@+id/languageSpinner"
-        android:layout_width="wrap_content"
+    <!-- Toolbar arrondie -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBarQuiz"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:title="Quiz"
+        android:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/selectedLangLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Langue sélectionnée : -"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintTop_toBottomOf="@id/languageSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
-        android:id="@+id/progressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Progression : 0/10"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/selectedLangLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp"/>
-
-    <TextView
-        android:id="@+id/questionText"
+    <!-- Conteneur carte arrondie -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/quizCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Question..."
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/progressText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
-
-    <EditText
-        android:id="@+id/answerInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Votre réponse"
-        app:layout_constraintTop_toBottomOf="@id/questionText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:inputType="text"/>
-
-    <Button
-        android:id="@+id/quitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quiz_quit"
-        style="@style/RoundedButton"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/answerInput"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Suivant"
-        style="@style/RoundedButton"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/answerInput"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/topAppBarQuiz"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/resultText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/nextButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
 
-    <Button
-        android:id="@+id/restartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quiz_restart"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/resultText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <!-- Spinner langue -->
+            <Spinner
+                android:id="@+id/languageSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp"
+                android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/homeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quiz_home"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/restartButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <!-- Langue sélectionnée -->
+            <TextView
+                android:id="@+id/selectedLangLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Langue sélectionnée : EN"
+                android:textColor="@color/primaryDark"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progression : 0/10"
+                android:textColor="@color/secondaryText"
+                android:textSize="14sp"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Icône de la question -->
+            <ImageView
+                android:id="@+id/questionIcon"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_launcher_foreground"
+                android:background="@drawable/icon_background"
+                android:padding="16dp"
+                android:scaleType="centerInside" />
+
+            <!-- Question -->
+            <TextView
+                android:id="@+id/questionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Question..."
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/gris_fonce"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Champ réponse -->
+            <EditText
+                android:id="@+id/answerInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Votre réponse"
+                android:background="@drawable/bg_input_edittext"
+                android:padding="16dp"
+                android:textColor="@color/primaryDark"
+                android:textColorHint="@color/secondaryText"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Bouton Suivant -->
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suivant"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="12dp"
+                style="@style/RoundedButton"/>
+
+            <!-- Résultat -->
+            <TextView
+                android:id="@+id/resultText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/gris_fonce"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Bouton Recommencer -->
+            <Button
+                android:id="@+id/restartButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recommencer"
+                android:visibility="gone"
+                android:textColor="@android:color/white"
+                style="@style/RoundedButton"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

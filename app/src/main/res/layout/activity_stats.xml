@@ -4,69 +4,424 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="@color/backgroundLight"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/unlockedTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cartes débloquées : 0"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <Button
-        android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/back"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/totalTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cartes totales : 0"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/unlockedTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"/>
-
-    <TextView
-        android:id="@+id/starTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Étoiles disponibles : 0"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/totalTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"/>
-
-    <TextView
-        android:id="@+id/globalStats"
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBarStats"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Statistiques globales"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="12dp"
-        android:background="@android:color/white"
-        android:elevation="2dp"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/starTextView"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/violet_flashy"
+        android:title="Mes Statistiques"
+        android:titleTextColor="@color/white"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 1. Carte Infos Globales -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/statsInfoCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/topAppBarStats"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Débloquées -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_unlock"
+                    app:tint="@color/primaryDark"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/unlockedTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cartes débloquées : 0"
+                    android:textColor="@color/primaryDark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Totales -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_collection"
+                    app:tint="@color/primaryDark"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/totalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cartes totales : 0"
+                    android:textColor="@color/secondaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- Étoiles -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/secondaryText"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/starTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Étoiles disponibles : 0"
+                    android:textColor="@color/secondaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!-- 2. Carte Résumé -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/summaryCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/statsInfoCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Résumé"
+                android:textStyle="bold"
+                android:textColor="@color/primaryDark"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <!-- En-tête avec icônes -->
+                <TableRow>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_bar_chart"
+                            app:tint="@color/primaryDark"
+                            android:layout_marginEnd="4dp" />
+
+                        <TextView
+                            style="@style/StatTableHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Parties" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/moyenne"
+                            app:tint="@color/primaryDark"
+                            android:layout_marginEnd="4dp" />
+
+                        <TextView
+                            style="@style/StatTableHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Moyenne" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_star"
+                            app:tint="@color/primaryDark"
+                            android:layout_marginEnd="4dp" />
+
+                        <TextView
+                            style="@style/StatTableHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Meilleur" />
+                    </LinearLayout>
+
+                </TableRow>
+
+
+                <!-- Valeurs -->
+                <TableRow>
+                    <TextView
+                        android:id="@+id/statParties"
+                        style="@style/StatTableValue"
+                        android:text="0" />
+                    <TextView
+                        android:id="@+id/statMoyenne"
+                        style="@style/StatTableValue"
+                        android:text="-" />
+                    <TextView
+                        android:id="@+id/statBest"
+                        style="@style/StatTableValue"
+                        android:text="-" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- 3. Carte Langues -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/langStatsCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/summaryCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:cardBackgroundColor="@color/white">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Titre -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/internet"
+                    app:tint="@color/primaryDark"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Langues"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/primaryDark" />
+            </LinearLayout>
+
+        <!-- Bloc anglais -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_flag_uk"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/langEnLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="English"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryDark" />
+
+                <TextView
+                    android:id="@+id/langEnCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primaryDark" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/langEnBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="@color/blue_flashy"
+                android:backgroundTint="@color/backgroundSoftGrey"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Bloc espagnol -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_flag_es"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/langEsLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Espagnol"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryDark" />
+
+                <TextView
+                    android:id="@+id/langEsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primaryDark" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/langEsBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="@color/blue_flashy"
+                android:backgroundTint="@color/backgroundSoftGrey"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Bloc mix -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/languages"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/langMixLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mix"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryDark" />
+
+                <TextView
+                    android:id="@+id/langMixCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primaryDark" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/langMixBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="@color/blue_flashy"
+                android:backgroundTint="@color/backgroundSoftGrey" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- 4. RecyclerView Scores -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/statsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/globalStats"
+        android:paddingTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/langStatsCard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+

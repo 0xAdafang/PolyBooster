@@ -1,40 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    android:minHeight="80dp"
+    app:cardBackgroundColor="@color/goodResult">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/scoreText"
+        <!-- Icône de langue -->
+        <ImageView
+            android:id="@+id/langIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_flag_uk"
+            android:contentDescription="Langue" />
+
+        <!-- Bloc Score + Langue -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Score : 8/10"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/langIcon"
+            android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/langText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Langue : EN"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/scoreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score : 10/10"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/langText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Langue : EN"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Date à droite -->
         <TextView
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Le : 2024-04-01 12:30"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary" />
-
-    </LinearLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="2024-01-29"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
+
+
+
+

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,17 @@ class CollectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_collection)
+
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.topAppBarCollection)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Accueil"
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         cardDao = AppDatabase.getDatabase(this).cardDao()
@@ -123,18 +135,41 @@ class CollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private class CardVH(v: View) : RecyclerView.ViewHolder(v) {
-        private val fr: TextView  = v.findViewById(R.id.cardFrText)
-        private val en: TextView  = v.findViewById(R.id.cardEnText)
-        private val es: TextView  = v.findViewById(R.id.cardEsText)
+        private val fr: TextView = v.findViewById(R.id.cardFrText)
+        private val en: TextView = v.findViewById(R.id.cardEnText)
+        private val es: TextView = v.findViewById(R.id.cardEsText)
+        private val icon: ImageView = v.findViewById(R.id.cardIcon)
+        private val category: TextView = v.findViewById(R.id.cardPortfolio)
+
 
         fun bind(card: Card) {
             fr.text = card.fr
             en.text = card.en
             es.text = card.es
 
-            /* carte grisée si verrouillée */
-            val alpha = if (card.unlocked) 1f else 0.3f
-            itemView.alpha = alpha
+            // Chargement de l’icône
+            val context = itemView.context
+            val resId = context.resources.getIdentifier(card.iconName, "drawable", context.packageName)
+            if (resId != 0) {
+                icon.setImageResource(resId)
+            } else {
+                icon.setImageResource(R.drawable.ic_launcher_background)
+            }
+
+            // Opacité selon verrouillage
+            itemView.alpha = if (card.unlocked) 1f else 0.3f
+
+            // Affiche la catégorie avec emoji
+            category.text = when (card.category) {
+                "aliments"   -> "🥗 Aliments"
+                "transport"  -> "🚗 Transport"
+                "politesse"  -> "🙏 Politesse"
+                "geographie" -> "🌍 Géographie"
+                "objet"      -> "📦 Objets"
+                else         -> "Catégorie : ${card.category.capitalize()}"
+            }
+
         }
     }
+
 }

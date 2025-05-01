@@ -13,7 +13,8 @@ class QuizManager(private val db: AppDatabase, private val boosterManager: Boost
         val promptLang: String,
         val answerLang: String,
         val promptText: String,
-        val correctAnswer: String
+        val correctAnswer: String,
+        val iconName: String
     )
 
     suspend fun generateQuiz(targetLang: String? = null): List<QuizQuestion> = withContext(Dispatchers.IO) {
@@ -27,17 +28,22 @@ class QuizManager(private val db: AppDatabase, private val boosterManager: Boost
                     promptLang = "FR",
                     answerLang = "EN",
                     promptText = card.fr,
-                    correctAnswer = card.en
+                    correctAnswer = card.en,
+                    iconName = card.iconName ?: "ic_launcher_background"
                 )
                 else -> QuizQuestion(
                     id = card.id,
                     promptLang = "FR",
                     answerLang = "ES",
                     promptText = card.fr,
-                    correctAnswer = card.es
+                    correctAnswer = card.es,
+                    iconName = card.iconName ?: "ic_launcher_background"
                 )
             }
         }
+    }
+    fun checkAnswer(question: QuizQuestion, userAnswer: String): Boolean {
+        return question.correctAnswer.trim().equals(userAnswer.trim(), ignoreCase = true)
     }
 
     fun evaluateQuiz(
@@ -54,4 +60,5 @@ class QuizManager(private val db: AppDatabase, private val boosterManager: Boost
 
         return correct
     }
+
 }

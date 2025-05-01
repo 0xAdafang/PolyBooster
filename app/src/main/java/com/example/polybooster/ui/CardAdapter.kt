@@ -3,6 +3,7 @@ package com.example.polybooster.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.polybooster.R
@@ -15,6 +16,7 @@ class CardAdapter(private var cards: List<Card>) : RecyclerView.Adapter<CardAdap
         val enText: TextView = view.findViewById(R.id.cardEnText)
         val esText: TextView = view.findViewById(R.id.cardEsText)
         val portfolioText: TextView = view.findViewById(R.id.cardPortfolio)
+        val icon: ImageView = view.findViewById(R.id.cardIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -29,6 +31,15 @@ class CardAdapter(private var cards: List<Card>) : RecyclerView.Adapter<CardAdap
         holder.enText.text = "EN : ${card.en}"
         holder.esText.text = "ES : ${card.es}"
         holder.portfolioText.text = "Catégorie : ${card.portfolio}"
+
+        val context = holder.itemView.context
+        val resId = context.resources.getIdentifier(card.iconName, "drawable", context.packageName)
+        if (resId != 0) {
+            holder.icon.setImageResource(resId)
+        } else {
+            holder.icon.setImageResource(R.drawable.ic_launcher_background)
+        }
+
     }
 
     override fun getItemCount() = cards.size

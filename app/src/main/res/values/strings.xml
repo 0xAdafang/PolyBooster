@@ -12,7 +12,7 @@
     <string name="lang_selected">Langue sélectionnée : %1$s</string>
 
     <string name="quiz_not_enough_cards">Pas assez de cartes débloquées pour le quiz.</string>
-    <string name="quiz_prompt">Traduis ce mot (%1$s → %2$s) : %3$s</string>
+    <string name="quiz_prompt">Comment dit-on “%1$s” en %2$s ?</string>
     <string name="quiz_progress">Progression : %1$d/%2$d</string>
     <string name="quiz_win">Bravo ! ⭐️ obtenue !</string>
     <string name="quiz_score">Ton score : %1$d/10</string>
