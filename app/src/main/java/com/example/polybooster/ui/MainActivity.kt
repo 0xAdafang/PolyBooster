@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             // 🥗 Aliments
             Card(fr = "pomme", en = "apple", es = "manzana", category = "aliments", iconName = "apple"),
             Card(fr = "pain", en = "bread", es = "pan", category = "aliments", iconName = "bread"),
-            Card(fr = "lait", en = "milk", es = "leche", category = "aliments", iconName = "apple"),
+            Card(fr = "lait", en = "milk", es = "leche", category = "aliments", iconName = "milk"),
             Card(fr = "fromage", en = "cheese", es = "queso", category = "aliments", iconName = "cheese"),
             Card(fr = "eau", en = "water", es = "agua", category = "aliments", iconName = "water"),
             Card(fr = "riz", en = "rice", es = "arroz", category = "aliments", iconName = "rice"),

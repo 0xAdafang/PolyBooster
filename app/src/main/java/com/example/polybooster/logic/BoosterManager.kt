@@ -17,13 +17,13 @@ class BoosterManager(
 
     companion object {
         private const val KEY_STAR_COUNT = "star_count"
-        private const val BOOSTER_COST = 1
+        private const val BOOSTER_COST = 2
     }
 
-    /** Initialise 20 étoiles au tout premier lancement. */
+    /** Initialise 5 étoiles au tout premier lancement. */
     suspend fun initializeIfFirstLaunch() = withContext(Dispatchers.IO) {
         if (!prefs.contains(KEY_STAR_COUNT)) {
-            prefs.edit { putInt(KEY_STAR_COUNT, 10) }
+            prefs.edit { putInt(KEY_STAR_COUNT, 5) }
         }
     }
 
@@ -43,6 +43,7 @@ class BoosterManager(
         cards
     }
 
+
     /** Ajoute n étoiles (récompense de quizz, daily, etc.). */
     fun addStar() = addStars(1)
 
@@ -50,6 +51,10 @@ class BoosterManager(
         prefs.edit { putInt(KEY_STAR_COUNT, getStarCount() + amount) }
     }
     fun getStarCount(): Int = prefs.getInt(KEY_STAR_COUNT, 0)
+
+    suspend fun isCollectionComplete(): Boolean = withContext(Dispatchers.IO) {
+        database.cardDao().getLockedCardCount() == 0
+    }
 
 
 

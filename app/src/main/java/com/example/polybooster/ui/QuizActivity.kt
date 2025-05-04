@@ -19,7 +19,6 @@ import kotlinx.coroutines.withContext
 import android.speech.tts.TextToSpeech
 import java.util.Locale
 
-
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
@@ -38,9 +37,6 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var questionIcon: ImageView
     private lateinit var textToSpeech: TextToSpeech
 
-
-
-
     // État du quiz
     private var questions    = listOf<QuizManager.QuizQuestion>()
     private var currentIndex = 0
@@ -51,13 +47,12 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
-
-        // Configuration du volume recommandé (75%)
+        // Configuration du volume
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         val recommendedVolume = (maxVolume * 0.75).toInt()
 
-        // Appliquer seulement si volume actuel est trop bas
+        // Pour augmenter le volume s'il est trop bas
         val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         if (currentVolume < recommendedVolume) {
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, recommendedVolume, 0)
@@ -68,16 +63,11 @@ class QuizActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Accueil"
 
-        toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         db             = AppDatabase.getDatabase(this)
         boosterManager = BoosterManager(this, db)
         quizManager    = QuizManager(db, boosterManager)
-
 
         questionText       = findViewById(R.id.questionText)
         answerInput        = findViewById(R.id.answerInput)
@@ -89,9 +79,6 @@ class QuizActivity : AppCompatActivity() {
         restartButton      = findViewById(R.id.restartButton)
         questionIcon = findViewById(R.id.questionIcon)
 
-
-
-        // spinner langues
         // Spinner langues avec icônes
         val languages = listOf(
             SpinnerLanguageItem("EN", R.drawable.ic_flag_uk),
@@ -120,7 +107,7 @@ class QuizActivity : AppCompatActivity() {
 
         textToSpeech = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                textToSpeech.language = Locale.FRANCE // ou Locale.FRANCE selon le besoin
+                textToSpeech.language = Locale.FRANCE
             }
         }
 
@@ -149,8 +136,6 @@ class QuizActivity : AppCompatActivity() {
             player.start()
         }
 
-
-
         restartButton.setOnClickListener {
             restartButton.visibility = View.GONE
             resultText.text = ""
@@ -159,7 +144,6 @@ class QuizActivity : AppCompatActivity() {
     }
 
     // Quiz
-
     private fun loadQuiz() = lifecycleScope.launch {
         questions = withContext(Dispatchers.IO) {
             quizManager.generateQuiz(selectedLang)
@@ -194,15 +178,15 @@ class QuizActivity : AppCompatActivity() {
         answerInput.requestFocus()
         textToSpeech.speak(q.promptText, TextToSpeech.QUEUE_FLUSH, null, null)
 
-        // 🔹 Charger l'icône de la question (par nom depuis drawable)
+        // Charger l'icône de la question (par nom depuis drawable)
         val resId = resources.getIdentifier(q.iconName, "drawable", packageName)
         if (resId != 0) {
             questionIcon.setImageResource(resId)
         } else {
-            questionIcon.setImageResource(R.drawable.ic_launcher_background) // fallback
+            questionIcon.setImageResource(R.drawable.ic_launcher_background)
         }
 
-        // 🔹 Animation d’apparition
+        // Animation d’apparition
         if (withAnim) {
             val fadeZoom = AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply {
                 duration = 400
@@ -213,9 +197,6 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun showResult() {
         val score = quizManager.evaluateQuiz(userAnswers, questions)
         resultText.text = if (score >= 7)
@@ -223,7 +204,7 @@ class QuizActivity : AppCompatActivity() {
         else
             getString(R.string.quiz_score, score)
 
-        // ⭐ Son de joie si une étoile est gagnée
+        // Son de joie si une étoile est gagnée
         if (score >= 7) {
             val mediaPlayer = MediaPlayer.create(this, R.raw.star_won)
             mediaPlayer?.apply {

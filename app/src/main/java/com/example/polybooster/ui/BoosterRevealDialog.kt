@@ -1,6 +1,7 @@
 package com.example.polybooster.ui
 
 import android.app.Dialog
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
@@ -48,13 +49,25 @@ class BoosterRevealDialog(
         dialog.setOnShowListener {
             val button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             button.setOnClickListener {
-                currentIndex++
-                if (currentIndex < cards.size) {
+                if (currentIndex < cards.lastIndex) {
+                    // Son de flip de carte
+                    val player = MediaPlayer.create(requireContext(), R.raw.card_flip)
+                    player.setOnCompletionListener { it.release() }
+                    player.start()
+
+                    // Met à jour la carte
+                    currentIndex++
                     updateView()
                     if (currentIndex == cards.lastIndex) {
                         button.text = "Terminer"
                     }
+
                 } else {
+                    // Dernière carte son de victoire
+                    val finalPlayer = MediaPlayer.create(requireContext(), R.raw.card_last)
+                    finalPlayer.setOnCompletionListener { it.release() }
+                    finalPlayer.start()
+
                     dialog.dismiss()
                 }
             }

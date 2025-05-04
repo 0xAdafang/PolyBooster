@@ -24,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_flag_uk"
-            android:contentDescription="Langue" />
+            android:contentDescription="@string/langue" />
 
         <!-- Bloc Score + Langue -->
         <LinearLayout

@@ -7,16 +7,12 @@
     android:background="@color/backgroundLight">
 
     <!-- Titre -->
-
-    <!-- Bouton Booster -->
-
-    <!-- Bouton Quiz -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:text="Bienvenue sur PolyBooster "
+        android:text="@string/titre_principale"
         android:textColor="#333333"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -24,15 +20,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Bouton booster -->
     <Button
         android:id="@+id/boosterButton"
         style="@style/RoundedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:text="@string/ouvrir_un_booster"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/titre_un_booster"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleText" />
 
@@ -43,9 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Lancer le Quiz"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/quiz"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/boosterButton" />
 
@@ -55,7 +54,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Voir mes Stats"
+        android:text="@string/mes_stats"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         app:layout_constraintTop_toBottomOf="@id/quizButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -67,7 +68,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Collection"
+        android:text="@string/collection"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         app:layout_constraintTop_toBottomOf="@id/statsButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

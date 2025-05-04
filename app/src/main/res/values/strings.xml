@@ -16,8 +16,7 @@
     <string name="quiz_progress">Progression : %1$d/%2$d</string>
     <string name="quiz_win">Bravo ! ⭐️ obtenue !</string>
     <string name="quiz_score">Ton score : %1$d/10</string>
-    <string name="quiz_score_star">Bravo ! %1$d/10 – +1 étoile !</string>
-
+    <string name="quiz_score_star">Bravo\u00A0! %1$d\u00A0/ 10 \u2013 1+ étoile\u00A0!</string>
 
     <string name="stat_title">Statistiques globales</string>
     <string name="stat_total">Total parties : %1$d</string>
@@ -41,7 +40,7 @@ EN → %1$d, ES → %2$d, MIX → %3$d</string>
     <string name="label_star_error">Pas assez d’étoiles.</string>
     <string name="label_etoiles">Étoiles : %1$d</string>
     <string name="label_star_not_enough">Pas assez d étoiles pour ouvrir un booster.</string>
-    <string name="ouvrir_un_booster">Ouvrir un Booster</string>
+    <string name="titre_un_booster">Ouvrir un Booster</string>
 
     <string name="back">Retour</string>
 
@@ -58,6 +57,22 @@ EN → %1$d, ES → %2$d, MIX → %3$d</string>
     Répartition : EN → %4$d, ES → %5$d, MIX → %6$d</string>
 
     <string name="menu_collection">Collection</string>
+    <string name="titre_principale">Bienvenue sur PolyBooster</string>
+    <string name="collection">Collection</string>
+    <string name="mes_stats">Voir mes Stats</string>
+    <string name="quiz">Lancer le Quiz</string>
+    <string name="ma_collection">Ma Collection</string>
+    <string name="booster">Booster</string>
+    <string name="toiles_0">Étoiles : 0</string>
+    <string name="motivation">Chaque booster te rapproche de ton objectif 🚀</string>
+    <string name="toolbarquiz">Quiz</string>
+    <string name="select_en">Langue sélectionnée : EN</string>
+    <string name="progression">Progression : 0/10</string>
+    <string name="question">Question...</string>
+    <string name="votre_r_ponse">Votre réponse</string>
+    <string name="suivant">Suivant</string>
+    <string name="recommencer">Recommencer</string>
+    <string name="langue">Langue</string>
 
 
 </resources>

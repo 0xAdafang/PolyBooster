@@ -12,8 +12,7 @@
         android:id="@+id/topAppBarQuiz"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:title="Quiz"
-        android:titleTextColor="@android:color/white"
+        android:title="@string/toolbarquiz"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +45,8 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="12dp"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
                 android:layout_marginBottom="12dp"/>
 
             <!-- Langue sélectionnée -->
@@ -53,7 +54,7 @@
                 android:id="@+id/selectedLangLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Langue sélectionnée : EN"
+                android:text="@string/select_en"
                 android:textColor="@color/primaryDark"
                 android:textSize="16sp"
                 android:layout_marginBottom="4dp"/>
@@ -62,7 +63,7 @@
                 android:id="@+id/progressText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Progression : 0/10"
+                android:text="@string/progression"
                 android:textColor="@color/secondaryText"
                 android:textSize="14sp"
                 android:layout_marginBottom="24dp"/>
@@ -84,7 +85,7 @@
                 android:id="@+id/questionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Question..."
+                android:text="@string/question"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/gris_fonce"
@@ -95,7 +96,7 @@
                 android:id="@+id/answerInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Votre réponse"
+                android:hint="@string/votre_r_ponse"
                 android:background="@drawable/bg_input_edittext"
                 android:padding="16dp"
                 android:textColor="@color/primaryDark"
@@ -107,7 +108,7 @@
                 android:id="@+id/nextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Suivant"
+                android:text="@string/suivant"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="12dp"
                 style="@style/RoundedButton"/>
@@ -127,7 +128,7 @@
                 android:id="@+id/restartButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recommencer"
+                android:text="@string/recommencer"
                 android:visibility="gone"
                 android:textColor="@android:color/white"
                 style="@style/RoundedButton"/>

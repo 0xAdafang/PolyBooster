@@ -11,13 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.polybooster.R
-import com.example.polybooster.booster.BoosterManager
 import com.example.polybooster.data.database.AppDatabase
 import com.example.polybooster.data.model.Card
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.Normalizer
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -37,23 +35,21 @@ class CollectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_collection)
 
+        // Toolbar avec retour
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.topAppBarCollection)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Accueil"
 
-        toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        // Dao pour accéder aux cartes
         cardDao = AppDatabase.getDatabase(this).cardDao()
 
-        // Adapter + grille 2 colonnes
+        // Configuration du RecyclerView avec grille responsive
         adapter = CollectionAdapter()
         val span = 2
+
         val recycler = findViewById<RecyclerView>(R.id.collectionRecycler)
         recycler.layoutManager = GridLayoutManager(this, span).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -63,9 +59,11 @@ class CollectionActivity : AppCompatActivity() {
         }
         recycler.adapter = adapter
 
+        // Chargement initial
         loadData()
     }
 
+    /** Charge les données depuis la base et les transmet à l'adapter*/
     private fun loadData() = lifecycleScope.launch {
         val sections = mutableListOf<Any>()
 
@@ -73,15 +71,15 @@ class CollectionActivity : AppCompatActivity() {
             for ((key, title) in categories) {
                 val cards = cardDao.getCardsByCategory(key)
 
-                // 1) ajoute l’en‑tête
-                sections.add(
-                    "$title  (${cards.count { it.unlocked }}/${cards.size})"
-                )
-                // 2) ajoute les cartes triées
+                // 1) un en-tête de section avec le ratio débloqué/total
+                sections.add("$title  (${cards.count { it.unlocked }}/${cards.size})")
+
+                // 2) Ajoute les cartes triées par ordre alphabétique
                 sections.addAll(cards.sortedBy { it.fr })
             }
         }
-        adapter.submit(sections)   // submit(List<Any>)
+
+        adapter.submit(sections)
     }
 
     override fun onOptionsItemSelected(item: android.view.MenuItem) =

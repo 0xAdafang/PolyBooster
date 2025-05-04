@@ -33,7 +33,11 @@ interface CardDao {
     @Query("""
     SELECT * FROM cards
     WHERE category = :category
-    ORDER BY fr
-""")
+    ORDER BY fr """)
     suspend fun getCardsByCategory(category: String): List<Card>
+
+    @Query("SELECT COUNT(*) FROM cards WHERE unlocked = 0")
+    suspend fun getLockedCardCount(): Int
+
+
 }
