@@ -41,8 +41,8 @@ Ce projet a été majoritairement réalisé en solo dans le cadre d’un apprent
 
 ### 🙌 Contribution
 
-0xAdafanf : Partie logique (backend, partie Kotlin et XML de base, debug)
-IvRdz : Partie esthétique (front XML, effet sonore)
+- 0xAdafanf : Partie logique (backend, partie Kotlin et XML de base, debug)
+- IvRdz : Partie esthétique (front XML, effet sonore)
 
 ---
 
