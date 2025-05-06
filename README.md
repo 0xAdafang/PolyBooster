@@ -25,12 +25,6 @@
 
 ---
 
-## 📸 Aperçu
-
-*(Ajoute ici quelques screenshots de l'app si possible, ou une petite animation GIF de l'ouverture d’un booster si t'as le temps.)*
-
----
-
 ## 🧑‍💻 Développement
 
 Ce projet a été majoritairement réalisé en solo dans le cadre d’un apprentissage intensif de **Kotlin Android**, en mettant en œuvre :
@@ -83,12 +77,6 @@ git clone https://github.com/0xAdafang/PolyBooster.git
 - 💾 **Database**: Room / SQLite
 - 🧩 **Architecture**: Simplified MVVM
 - 🎨 **UI**: XML Layout + Material Design
-
----
-
-## 📸 Preview
-
-*(Add some screenshots or a short GIF of the booster opening animation if you can.)*
 
 ---
 
