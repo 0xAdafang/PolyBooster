@@ -1,3 +1,4 @@
+FR and EN
 # PolyBooster
 
 **PolyBooster** est une application Android développée en **Kotlin** qui propose un système de **boosters de cartes de vocabulaire** pour apprendre de nouvelles langues de manière ludique. Les utilisateurs peuvent débloquer des cartes chaque jour, les collectionner par thématiques, et tester leurs connaissances à travers des **quizz dynamiques**.
