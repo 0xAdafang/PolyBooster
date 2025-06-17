@@ -55,8 +55,4 @@ class BoosterManager(
     suspend fun isCollectionComplete(): Boolean = withContext(Dispatchers.IO) {
         database.cardDao().getLockedCardCount() == 0
     }
-
-
-
-
 }
