@@ -10,7 +10,7 @@
 
 ## 📱 Main Features
 
-- **Daily booster opening with 5 cards** (word in French + English/Spanish translation)
+- **Open boosters using stars earned through quizzes**, and build your collection while learning
 - **Themed portfolio organization** (food, transport, geography, etc.)
 - **Quiz mode** based on unlocked cards for interactive review
 - **Card collection view and search**
