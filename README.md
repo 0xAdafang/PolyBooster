@@ -50,9 +50,11 @@ This project was primarily developed solo as part of an intensive learning proce
 
 ### Steps
 
-1. **Clone the repository**
 ```bash
-git clone https://github.com/0xAdafang/PolyBooster.git
+
+1. **Clone the repository**
+
+2. git clone https://github.com/0xAdafang/PolyBooster.git
 
 3. Ouvrir le projet dans Android Studio
 
